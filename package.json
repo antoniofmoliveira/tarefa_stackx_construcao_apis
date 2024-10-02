@@ -16,6 +16,7 @@
     "author": "antoniofmoliveira@outlook.com",
     "license": "ISC",
     "dependencies": {
+        "dotenv": "^16.4.5",
         "express": "^4.21.0",
         "fetch": "^1.1.0",
         "filesystem": "^1.0.1"

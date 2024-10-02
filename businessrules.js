@@ -37,12 +37,10 @@ function createItem(item) {
 }
 
 function readItems() {
-    loadDataFromFile()
     return data
 }
 
 function readItemById(id) {
-    loadDataFromFile()
     return data.find(item => item.id === parseInt(id))
 }
 
@@ -66,4 +64,4 @@ function deleteItem(id) {
     return null
 }
 
-export { createItem, readItems, readItemById, updateItem, deleteItem }
+export { createItem, readItems, readItemById, updateItem, deleteItem, loadDataFromFile }
