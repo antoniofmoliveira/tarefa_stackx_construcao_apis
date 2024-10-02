@@ -7,4 +7,5 @@
 
 # Passo 2: adicionar validações
 
-- adicionada a função `checkToken` para verificar se o cliente tem a autorização necessária para adicionar, modificar e excluir dados.
+- adicionada a função `checkToken` para verificar se o cliente tem a autorização necessária para adicionar, modificar e excluir dados. O token é carregado a partir de variáveis de ambiente tanto no cliente como no servidor.
+
