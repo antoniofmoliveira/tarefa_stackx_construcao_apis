@@ -1,0 +1,27 @@
+{
+    "name": "construcao_apis",
+    "version": "1.0.0",
+    "description": "tarefa construcao de apis para stackx",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "nodemon": "nodemon index.js"
+    },
+    "keywords": [
+        "stackx",
+        "node",
+        "express",
+        "api"
+    ],
+    "author": "antoniofmoliveira@outlook.com",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.21.0",
+        "fetch": "^1.1.0",
+        "filesystem": "^1.0.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.7"
+    },
+    "type": "module"
+}
