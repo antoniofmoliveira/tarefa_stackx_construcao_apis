@@ -9,3 +9,4 @@
 
 - adicionada a função `checkToken` para verificar se o cliente tem a autorização necessária para adicionar, modificar e excluir dados. O token é carregado a partir de variáveis de ambiente tanto no cliente como no servidor.
 
+- alterada a entidade `item` para entidade `contato` contendo nome, email, idade e endereço do contato

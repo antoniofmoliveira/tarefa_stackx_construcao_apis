@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import Express from 'express';
-import { createItem, readItems, readItemById, updateItem, deleteItem, loadDataFromFile } from './businessrules.js';
+import { createContato, readContatos, readContatoById, updateContato, deleteContato, loadDataFromFile } from './businessrules.js';
 
 const server = Express();
 const port = 1234;
@@ -19,45 +19,45 @@ function checkToken(request, response, next) {
     next();
 }
 
-server.post('/items', checkToken, (request, response) => {
-    const item = request.body;
-    const newItem = createItem(item);
-    response.status(201).json(newItem);
+server.post('/contatos', checkToken, (request, response) => {
+    const contato = request.body;
+    const newContato = createContato(contato);
+    response.status(201).json(newContato);
 })
 
-server.get('/items', (request, response) => {
-    const items = readItems();
-    response.json(items);
+server.get('/contatos', (request, response) => {
+    const contatos = readContatos();
+    response.json(contatos);
 })
 
-server.get('/items/:id', (request, response) => {
+server.get('/contatos/:id', (request, response) => {
     const id = request.params.id;
-    const item = readItemById(id);
-    if (item) {
-        response.json(item);
+    const contato = readContatoById(id);
+    if (contato) {
+        response.json(contato);
     } else {
-        response.sendStatus(404).json({ message: 'Item não encontrado' });
+        response.sendStatus(404).json({ message: 'Contato não encontrado' });
     }
 })
 
-server.put('/items/:id', checkToken, (request, response) => {
+server.put('/contatos/:id', checkToken, (request, response) => {
     const id = request.params.id;
-    const updatedItem = request.body;
-    const item = updateItem(id, updatedItem);
-    if (item) {
-        response.json(item);
+    const updatedContato = request.body;
+    const contato = updateContato(id, updatedContato);
+    if (contato) {
+        response.json(contato);
     } else {
-        response.sendStatus(404).json({ message: 'Item não encontrado' });
+        response.sendStatus(404).json({ message: 'Contato não encontrado' });
     }
 })
 
-server.delete('/items/:id', checkToken, (request, response) => {
+server.delete('/contatos/:id', checkToken, (request, response) => {
     const id = request.params.id;
-    const item = deleteItem(id);
-    if (item) {
-        response.json({ message: 'Item excluído com sucesso!' });
+    const contato = deleteContato(id);
+    if (contato) {
+        response.json({ message: 'Contato excluído com sucesso!' });
     } else {
-        response.sendStatus(404).json({ message: 'Item não encontrado' });
+        response.sendStatus(404).json({ message: 'Contato não encontrado' });
     }
 })
 loadDataFromFile()

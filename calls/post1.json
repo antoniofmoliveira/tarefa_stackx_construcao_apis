@@ -1,3 +1,10 @@
 {
-    "item": "sabão"
+    "nome": "antonio da silva",
+    "email": "antoniodasilva@outlook.com",
+    "idade": 30,
+    "endereco": {
+        "rua": "rua dos bobos, 0",
+        "cidade": "sao paulo",
+        "estado": "sp"
+    }
 }

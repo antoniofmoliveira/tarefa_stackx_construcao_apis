@@ -1,3 +1,10 @@
 {
-    "item": "hidratante"
+    "nome": "antonio fernando",
+    "email": "antoniofernand0@outlook.com",
+    "idade": 41,
+    "endereco": {
+        "rua": "rua dos sonhos, 0",
+        "cidade": "sao paulo",
+        "estado": "sp"
+    }
 }

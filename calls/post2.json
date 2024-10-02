@@ -1,3 +1,10 @@
 {
-    "item": "shampoo"
+    "nome": "joao silva",
+    "email": "joaosilva@outlook.com",
+    "idade": 25,
+    "endereco": {
+        "rua": "rua dos bolos, 0",
+        "cidade": "rio de janeiro",
+        "estado": "rj"
+    }
 }

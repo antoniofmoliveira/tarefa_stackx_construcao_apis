@@ -28,40 +28,40 @@ function loadDataFromFile() {
 
 
 
-function createItem(item) {
+function createContato(contato) {
     lastId += 1
-    item.id = lastId
-    data.push(item)
+    contato.id = lastId
+    data.push(contato)
     saveDataToFile()
-    return item
+    return contato
 }
 
-function readItems() {
+function readContatos() {
     return data
 }
 
-function readItemById(id) {
-    return data.find(item => item.id === parseInt(id))
+function readContatoById(id) {
+    return data.find(contato => contato.id === parseInt(id))
 }
 
-function updateItem(id, updatedItem) {
-    const index = data.findIndex(item => item.id === parseInt(id))
+function updateContato(id, updatedContato) {
+    const index = data.findIndex(contato => contato.id === parseInt(id))
     if (index !== -1) {
-        data[index] = { ...data[index], ...updatedItem, id: data[index].id }
+        data[index] = { ...data[index], ...updatedContato, id: data[index].id }
         saveDataToFile()
         return data[index]
     }
     return null
 }
 
-function deleteItem(id) {
-    const index = data.findIndex(item => item.id === parseInt(id))
+function deleteContato(id) {
+    const index = data.findIndex(contato => contato.id === parseInt(id))
     if (index !== -1) {
-        const deletedItem = data.splice(index, 1)
+        const deletedContato = data.splice(index, 1)
         saveDataToFile()
-        return deletedItem[0]
+        return deletedContato[0]
     }
     return null
 }
 
-export { createItem, readItems, readItemById, updateItem, deleteItem, loadDataFromFile }
+export { createContato, readContatos, readContatoById, updateContato, deleteContato, loadDataFromFile }

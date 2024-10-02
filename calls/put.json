@@ -1,3 +1,10 @@
 {
-    "item": "sabonete"
+    "nome": "antonio fernando",
+    "email": "antoniofernand0@outlook.com",
+    "idade": 41,
+    "endereco": {
+        "rua": "rua das flores, 100",
+        "cidade": "jundiai",
+        "estado": "sp"
+    }
 }
