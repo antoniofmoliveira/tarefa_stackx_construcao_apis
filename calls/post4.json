@@ -1,0 +1,10 @@
+{
+    "nome": "joaquim fernando",
+    "email": "joaquimfernand0@outlook.com",
+    "idade": 21,
+    "endereco": {
+        "rua": "",
+        "cidade": "sao paulo",
+        "estado": "sp"
+    }
+}

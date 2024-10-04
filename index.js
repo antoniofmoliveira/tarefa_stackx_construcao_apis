@@ -1,11 +1,23 @@
 import 'dotenv/config'
 import Express from 'express';
 import { createContato, readContatos, readContatoById, updateContato, deleteContato, loadDataFromFile } from './businessrules.js';
+import Joi from 'joi';
 
 const server = Express();
 const port = 1234;
 
 server.use(Express.json());
+
+const schema = Joi.object({
+    nome: Joi.string().min(3).max(100).required(),
+    email: Joi.string().email().required(),
+    idade: Joi.number().min(18).max(120),
+    endereco: Joi.object({
+        rua: Joi.string(),
+        cidade: Joi.string(),
+        estado: Joi.string()
+    })
+});
 
 
 /**
@@ -31,15 +43,12 @@ function checkToken(request, response, next) {
 /// chamada que permite criar contatos após validação. usuário tem estar autorizado
 server.post('/contatos', checkToken, (request, response) => {
     const contato = request.body;
-    if (!contato.nome) {
-        return response.status(422).send("Nome é obrigatório")
+
+    const { error, value } = schema.validate(contato);
+    if (error) {
+        return response.status(422).send(error)
     }
-    if (!contato.email) {
-        return response.status(422).send("Email é obrigatório")
-    }
-    if (!contato.idade) {
-        return response.status(422).send("Idade é obrigatório")
-    }
+
     const newContato = createContato(contato);
     response.status(201).json(newContato);
 })
@@ -66,15 +75,12 @@ server.get('/contatos/:id', (request, response) => {
 server.put('/contatos/:id', checkToken, (request, response) => {
     const id = request.params.id;
     const updatedContato = request.body;
-    if (!updatedContato.nome) {
-        return response.status(422).send("Nome é obrigatório")
+
+    const { error, value } = schema.validate(updatedContato);
+    if (error) {
+        return response.status(422).send(error)
     }
-    if (!updatedContato.email) {
-        return response.status(422).send("Email é obrigatório")
-    }
-    if (!updatedContato.idade) {
-        return response.status(422).send("Idade é obrigatório")
-    }
+
     const contato = updateContato(id, updatedContato);
     if (contato) {
         response.json(contato);
