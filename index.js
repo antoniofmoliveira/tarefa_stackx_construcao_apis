@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import Express from 'express';
-import { createContato, readContatos, readContatoById, updateContato, deleteContato, inicializarPersistencia } from './businessrulesdb.js';
+import { createContato, readContatos, readContatoById, updateContato, deleteContato, inicializarPersistencia } from './businessrules.js';
 import Joi from 'joi';
 
 const server = Express();
