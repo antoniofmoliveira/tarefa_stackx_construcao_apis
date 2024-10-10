@@ -9,14 +9,14 @@ const port = 1234;
 server.use(Express.json());
 
 const schema = Joi.object({
-    nome: Joi.string().min(3).max(100).required(),
+    nome: Joi.string().min(3).max(255).required(),
     email: Joi.string().email().required(),
     idade: Joi.number().min(18).max(120),
     endereco: Joi.object({
-        rua: Joi.string(),
-        cidade: Joi.string(),
-        estado: Joi.string()
-    })
+        rua: Joi.string().optional(),
+        cidade: Joi.string().optional(),
+        estado: Joi.string().optional()
+    }).optional()
 });
 
 
@@ -40,8 +40,15 @@ function checkToken(request, response, next) {
     next();
 }
 
-/// chamada que permite criar contatos após validação. usuário tem estar autorizado
-server.post('/contatos', checkToken, (request, response) => {
+/**
+ * Handler que adiciona um contato.
+ * Verifica se a requisição tem o JSON com os dados do contato
+ * e se ele é válido. Se for, adiciona o contato e retorna o JSON
+ * com os dados do contato adicionado.
+ * @param {Express.Request} request - objeto com a requisição
+ * @param {Express.Response} response - objeto com a resposta
+ */
+function postHandler(request, response) {
     const contato = request.body;
 
     const { error, value } = schema.validate(contato);
@@ -58,10 +65,15 @@ server.post('/contatos', checkToken, (request, response) => {
         console.error(err);
         response.sendStatus(500);
     }
-})
+}
 
-/// chamada que lista todos os contatos
-server.get('/contatos', (request, response) => {
+/**
+ * Handler que retorna todos os contatos.
+ * Retorna o JSON com todos os contatos no corpo da resposta.
+ * @param {Express.Request} request - objeto com a requisição
+ * @param {Express.Response} response - objeto com a resposta
+ */
+function getAllHandler(request, response) {
     try {
         readContatos().then((contatos) => {
             response.setHeader('Content-Type', 'application/json');
@@ -72,12 +84,16 @@ server.get('/contatos', (request, response) => {
         console.error(err);
         response.sendStatus(500);
     }
-})
+}
 
-
-
-/// chamada que lista apenas o contato com o id fornecido
-server.get('/contatos/:id', (request, response) => {
+/**
+ * Handler que retorna um contato pelo seu ID.
+ * Verifica se o contato existe e retorna um erro 404 se nao encontrado.
+ * Retorna o JSON com os dados do contato no corpo da resposta.
+ * @param {Express.Request} request - objeto com a requisição
+ * @param {Express.Response} response - objeto com a resposta
+ */
+function getByIdHandler(request, response) {
     const id = request.params.id;
     try {
         readContatoById(id).then((contato) => {
@@ -93,10 +109,17 @@ server.get('/contatos/:id', (request, response) => {
         console.error(err);
         response.sendStatus(500);
     }
-})
+}
 
-/// chamada que valida e atualiza os dados do contato. usuário tem estar autorizado
-server.put('/contatos/:id', checkToken, (request, response) => {
+/**
+ * Handler que atualiza um contato com base no seu ID.
+ * Verifica se o contato existe e retorna um erro 404 se nao encontrado.
+ * Verifica se o JSON recebido e valido e retorna um erro 422 se invalido.
+ * Retorna o JSON com os dados do contato atualizado no corpo da resposta.
+ * @param {Express.Request} request - objeto com a requisi o
+ * @param {Express.Response} response - objeto com a resposta
+ */
+function putHandler(request, response) {
     const id = request.params.id;
     const updatedContato = request.body;
 
@@ -114,11 +137,16 @@ server.put('/contatos/:id', checkToken, (request, response) => {
         console.error(err);
         response.sendStatus(500);
     }
-})
+}
 
-
-/// chamada que deleta um contato. usuário tem que estar autorizado
-server.delete('/contatos/:id', checkToken, (request, response) => {
+/**
+ * Handler que deleta um contato com base no seu ID.
+ * Verifica se o contato existe e retorna um erro 404 se nao encontrado.
+ * Retorna o JSON com uma mensagem de sucesso no corpo da resposta.
+ * @param {Express.Request} request - objeto com a requisi o
+ * @param {Express.Response} response - objeto com a resposta
+ */
+function deleteHandler(request, response) {
     const id = request.params.id;
     const contato = deleteContato(id);
 
@@ -131,11 +159,20 @@ server.delete('/contatos/:id', checkToken, (request, response) => {
         console.error(err);
         response.sendStatus(500);
     }
-})
+}
 
-
+/// chamada que permite criar contatos após validação. usuário tem estar autorizado
+server.post('/contatos', checkToken, postHandler)
+/// chamada que lista todos os contatos
+server.get('/contatos', getAllHandler)
+/// chamada que lista apenas o contato com o id fornecido
+server.get('/contatos/:id', getByIdHandler)
+/// chamada que valida e atualiza os dados do contato. usuário tem estar autorizado
+server.put('/contatos/:id', checkToken, putHandler)
+/// chamada que deleta um contato. usuário tem que estar autorizado
+server.delete('/contatos/:id', checkToken, deleteHandler) 
+/// inicializa a camada de persistência
 inicializarPersistencia()
-
 /// ativa o servidor 
 server.listen(port, () => console.log(`Servidor escutando na porta ${port}`));
 
