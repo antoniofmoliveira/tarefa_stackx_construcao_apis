@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import Express from 'express';
-import { createContato, readContatos, readContatoById, updateContato, deleteContato, loadDataFromFile } from './businessrules.js';
+import { createContato, readContatos, readContatoById, updateContato, deleteContato, inicializarPersistencia } from './businessrulesdb.js';
 import Joi from 'joi';
 
 const server = Express();
@@ -49,25 +49,49 @@ server.post('/contatos', checkToken, (request, response) => {
         return response.status(422).send(error)
     }
 
-    const newContato = createContato(contato);
-    response.status(201).json(newContato);
+    try {
+        createContato(contato).then(contato => {
+            response.setHeader('Content-Type', 'application/json');
+            response.status(201).json(contato);
+        });
+    } catch (err) {
+        console.error(err);
+        response.sendStatus(500);
+    }
 })
 
 /// chamada que lista todos os contatos
 server.get('/contatos', (request, response) => {
-    const contatos = readContatos();
-    response.json(contatos);
+    try {
+        readContatos().then((contatos) => {
+            response.setHeader('Content-Type', 'application/json');
+            // console.log(contatos);
+            response.json(contatos);
+        });
+    } catch (err) {
+        console.error(err);
+        response.sendStatus(500);
+    }
 })
+
+
 
 /// chamada que lista apenas o contato com o id fornecido
 server.get('/contatos/:id', (request, response) => {
     const id = request.params.id;
-    const contato = readContatoById(id);
-
-    if (contato) {
-        response.json(contato);
-    } else {
-        response.sendStatus(404).json({ message: 'Contato não encontrado' });
+    try {
+        readContatoById(id).then((contato) => {
+            if (!contato) {
+                response.sendStatus(404).json({ message: 'Contato não encontrado' });
+                return;
+            }
+            console.log(contato);
+            response.setHeader('Content-Type', 'application/json');
+            response.json(contato);
+        });
+    } catch (err) {
+        console.error(err);
+        response.sendStatus(500);
     }
 })
 
@@ -81,11 +105,14 @@ server.put('/contatos/:id', checkToken, (request, response) => {
         return response.status(422).send(error)
     }
 
-    const contato = updateContato(id, updatedContato);
-    if (contato) {
-        response.json(contato);
-    } else {
-        response.sendStatus(404).json({ message: 'Contato não encontrado' });
+    try {
+        updateContato(id, updatedContato).then(contato => {
+            response.setHeader('Content-Type', 'application/json');
+            response.status(200).json(contato);
+        });
+    } catch (err) {
+        console.error(err);
+        response.sendStatus(500);
     }
 })
 
@@ -94,15 +121,20 @@ server.put('/contatos/:id', checkToken, (request, response) => {
 server.delete('/contatos/:id', checkToken, (request, response) => {
     const id = request.params.id;
     const contato = deleteContato(id);
-    if (contato) {
-        response.json({ message: 'Contato excluído com sucesso!' });
-    } else {
-        response.sendStatus(404).json({ message: 'Contato não encontrado' });
+
+    try {
+        deleteContato(id).then(contato => {
+            response.setHeader('Content-Type', 'application/json');
+            response.status(200).json({ message: 'Contato excluído com sucesso!' });
+        });
+    } catch (err) {
+        console.error(err);
+        response.sendStatus(500);
     }
 })
 
-/// carrega dados iniciais de contatos se disponíveis
-loadDataFromFile()
+
+inicializarPersistencia()
 
 /// ativa o servidor 
 server.listen(port, () => console.log(`Servidor escutando na porta ${port}`));
